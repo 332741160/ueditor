@@ -1,48 +1,55 @@
-var keymap = UE.keymap  = {
-    'Backspace' : 8,
-    'Tab' : 9,
-    'Enter' : 13,
+/**
+ * @file keymap.js
+ * @author leeight
+ */
 
-    'Shift':16,
-    'Control':17,
-    'Alt':18,
-    'CapsLock':20,
+define(function (require) {
+    return {
+        'Backspace': 8,
+        'Tab': 9,
+        'Enter': 13,
 
-    'Esc':27,
+        'Shift': 16,
+        'Control': 17,
+        'Alt': 18,
+        'CapsLock': 20,
 
-    'Spacebar':32,
+        'Esc': 27,
 
-    'PageUp':33,
-    'PageDown':34,
-    'End':35,
-    'Home':36,
+        'Spacebar': 32,
 
-    'Left':37,
-    'Up':38,
-    'Right':39,
-    'Down':40,
+        'PageUp': 33,
+        'PageDown': 34,
+        'End': 35,
+        'Home': 36,
 
-    'Insert':45,
+        'Left': 37,
+        'Up': 38,
+        'Right': 39,
+        'Down': 40,
 
-    'Del':46,
+        'Insert': 45,
 
-    'NumLock':144,
+        'Del': 46,
 
-    'Cmd':91,
+        'NumLock': 144,
 
-    '=':187,
-    '-':189,
+        'Cmd': 91,
 
-    "b":66,
-    'i':73,
-    //回退
-    'z':90,
-    'y':89,
-    //粘贴
-    'v' : 86,
-    'x' : 88,
+        '=': 187,
+        '-': 189,
 
-    's' : 83,
+        'b': 66,
+        'i': 73,
+        // 回退
+        'z': 90,
+        'y': 89,
+        // 粘贴
+        'v': 86,
+        'x': 88,
 
-    'n' : 78
-};
+        's': 83,
+
+        'n': 78
+    };
+});

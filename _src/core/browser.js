@@ -1,19 +1,17 @@
 /**
  * 浏览器判断模块
  * @file
+ * @author leeight
  * @module UE.browser
  * @since 1.2.6.1
  */
 
-/**
- * 提供浏览器检测的模块
- * @unfile
- * @module UE.browser
- */
-var browser = UE.browser = function(){
-    var agent = navigator.userAgent.toLowerCase(),
-        opera = window.opera,
-        browser = {
+define(function (require) {
+    var agent = navigator.userAgent.toLowerCase();
+    var opera = window.opera;
+
+    var browser = {
+
         /**
          * @property {boolean} ie 检测当前浏览器是否为IE
          * @example
@@ -23,7 +21,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        ie		:  /(msie\s|trident.*rv:)([\w.]+)/i.test(agent),
+        ie: /(msie\s|trident.*rv:)([\w.]+)/i.test(agent),
 
         /**
          * @property {boolean} opera 检测当前浏览器是否为Opera
@@ -34,7 +32,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        opera	: ( !!opera && opera.version ),
+        opera: (!!opera && opera.version),
 
         /**
          * @property {boolean} webkit 检测当前浏览器是否是webkit内核的浏览器
@@ -45,7 +43,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        webkit	: ( agent.indexOf( ' applewebkit/' ) > -1 ),
+        webkit: (agent.indexOf(' applewebkit/') > -1),
 
         /**
          * @property {boolean} mac 检测当前浏览器是否是运行在mac平台下
@@ -56,7 +54,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        mac	: ( agent.indexOf( 'macintosh' ) > -1 ),
+        mac: (agent.indexOf('macintosh') > -1),
 
         /**
          * @property {boolean} quirks 检测当前浏览器是否处于“怪异模式”下
@@ -67,7 +65,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        quirks : ( document.compatMode == 'BackCompat' )
+        quirks: (document.compatMode === 'BackCompat')
     };
 
     /**
@@ -79,26 +77,30 @@ var browser = UE.browser = function(){
     * }
     * ```
     */
-    browser.gecko =( navigator.product == 'Gecko' && !browser.webkit && !browser.opera && !browser.ie);
+    browser.gecko = (navigator.product === 'Gecko' && !browser.webkit && !browser.opera && !browser.ie);
 
     var version = 0;
 
     // Internet Explorer 6.0+
-    if ( browser.ie ){
+    if (browser.ie) {
 
-        var v1 =  agent.match(/(?:msie\s([\w.]+))/);
+        var v1 = agent.match(/(?:msie\s([\w.]+))/);
         var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
-        if(v1 && v2 && v1[1] && v2[1]){
-            version = Math.max(v1[1]*1,v2[1]*1);
-        }else if(v1 && v1[1]){
-            version = v1[1]*1;
-        }else if(v2 && v2[1]){
-            version = v2[1]*1;
-        }else{
+        if (v1 && v2 && v1[1] && v2[1]) {
+            version = Math.max(v1[1] * 1, v2[1] * 1);
+        }
+        else if (v1 && v1[1]) {
+            version = v1[1] * 1;
+        }
+        else if (v2 && v2[1]) {
+            version = v2[1] * 1;
+        }
+        else {
             version = 0;
         }
 
-        browser.ie11Compat = document.documentMode == 11;
+        browser.ie11Compat = document.documentMode === 11;
+
         /**
          * @property { boolean } ie9Compat 检测浏览器模式是否为 IE9 兼容模式
          * @warning 如果浏览器不是IE， 则该值为undefined
@@ -109,7 +111,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        browser.ie9Compat = document.documentMode == 9;
+        browser.ie9Compat = document.documentMode === 9;
 
         /**
          * @property { boolean } ie8 检测浏览器是否是IE8浏览器
@@ -133,7 +135,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        browser.ie8Compat = document.documentMode == 8;
+        browser.ie8Compat = document.documentMode === 8;
 
         /**
          * @property { boolean } ie7Compat 检测浏览器模式是否为 IE7 兼容模式
@@ -145,8 +147,8 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        browser.ie7Compat = ( ( version == 7 && !document.documentMode )
-                || document.documentMode == 7 );
+        browser.ie7Compat = ((version === 7 && !document.documentMode)
+            || document.documentMode === 7);
 
         /**
          * @property { boolean } ie6Compat 检测浏览器模式是否为 IE6 模式 或者怪异模式
@@ -158,7 +160,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        browser.ie6Compat = ( version < 7 || browser.quirks );
+        browser.ie6Compat = (version < 7 || browser.quirks);
 
         browser.ie9above = version > 8;
 
@@ -167,16 +169,14 @@ var browser = UE.browser = function(){
         browser.ie11above = version > 10;
 
         browser.ie11below = version < 11;
-
     }
 
     // Gecko.
-    if ( browser.gecko ){
-        var geckoRelease = agent.match( /rv:([\d\.]+)/ );
-        if ( geckoRelease )
-        {
-            geckoRelease = geckoRelease[1].split( '.' );
-            version = geckoRelease[0] * 10000 + ( geckoRelease[1] || 0 ) * 100 + ( geckoRelease[2] || 0 ) * 1;
+    if (browser.gecko) {
+        var geckoRelease = agent.match(/rv:([\d\.]+)/);
+        if (geckoRelease) {
+            geckoRelease = geckoRelease[1].split('.');
+            version = geckoRelease[0] * 10000 + (geckoRelease[1] || 0) * 100 + (geckoRelease[2] || 0) * 1;
         }
     }
 
@@ -191,7 +191,7 @@ var browser = UE.browser = function(){
      * ```
      */
     if (/chrome\/(\d+\.\d)/i.test(agent)) {
-        browser.chrome = + RegExp['\x241'];
+        browser.chrome = +RegExp.$1;
     }
 
     /**
@@ -204,18 +204,19 @@ var browser = UE.browser = function(){
      * }
      * ```
      */
-    if(/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(agent) && !/chrome/i.test(agent)){
-    	browser.safari = + (RegExp['\x241'] || RegExp['\x242']);
+    if (/(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(agent) && !/chrome/i.test(agent)) {
+        browser.safari = +(RegExp.$1 || RegExp.$2);
     }
 
-
     // Opera 9.50+
-    if ( browser.opera )
-        version = parseFloat( opera.version() );
+    if (browser.opera) {
+        version = parseFloat(opera.version());
+    }
 
     // WebKit 522+ (Safari 3+)
-    if ( browser.webkit )
-        version = parseFloat( agent.match( / applewebkit\/(\d+)/ )[1] );
+    if (browser.webkit) {
+        version = parseFloat(agent.match(/ applewebkit\/(\d+)/)[1]);
+    }
 
     /**
      * @property { Number } version 检测当前浏览器版本号
@@ -241,18 +242,13 @@ var browser = UE.browser = function(){
      * }
      * ```
      */
-    browser.isCompatible =
-        !browser.mobile && (
-        ( browser.ie && version >= 6 ) ||
-        ( browser.gecko && version >= 10801 ) ||
-        ( browser.opera && version >= 9.5 ) ||
-        ( browser.air && version >= 1 ) ||
-        ( browser.webkit && version >= 522 ) ||
-        false );
+    browser.isCompatible = !browser.mobile && (
+        (browser.ie && version >= 6)
+        || (browser.gecko && version >= 10801)
+        || (browser.opera && version >= 9.5)
+        || (browser.air && version >= 1)
+        || (browser.webkit && version >= 522)
+        || false);
+
     return browser;
-}();
-//快捷方式
-var ie = browser.ie,
-    webkit = browser.webkit,
-    gecko = browser.gecko,
-    opera = browser.opera;
+});

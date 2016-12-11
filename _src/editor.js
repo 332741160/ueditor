@@ -1,15 +1,16 @@
-UEDITOR_CONFIG = window.UEDITOR_CONFIG || {};
+/**
+ * @file editor.js
+ * @author leeight
+ */
 
-var baidu = window.baidu || {};
-
-window.baidu = baidu;
-
-window.UE = baidu.editor = {
-    plugins:{},
-    commands:{},
-    instants:{},
-    I18N:{},
-    _customizeUI:{},
-    version:'1.5.0'
-};
-var dom = UE.dom = {};
+define(function (require) {
+    return {
+        plugins: {},
+        commands: {},
+        instants: {},
+        I18N: {},
+        dom: {},
+        _customizeUI: {},   // eslint-disable-line
+        version: '1.5.0'
+    };
+});
