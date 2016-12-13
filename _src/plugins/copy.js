@@ -1,75 +1,92 @@
-UE.plugin.register('copy', function () {
+/**
+ * @file copy.js
+ * @author leeight
+ */
 
-    var me = this;
+/* global ZeroClipboard */
 
-    function initZeroClipboard() {
+define(function (require) {
+    var plugin = require('../core/plugin');
+    var domUtils = require('../core/domUtils');
+    var utils = require('../core/utils');
+    var browser = require('../core/browser');
 
-        ZeroClipboard.config({
-            debug: false,
-            swfPath: me.options.UEDITOR_HOME_URL + 'third-party/zeroclipboard/ZeroClipboard.swf'
-        });
+    plugin.register('copy', function () {
+        var me = this;
 
-        var client = me.zeroclipboard = new ZeroClipboard();
+        function initZeroClipboard() {
 
-        // 复制内容
-        client.on('copy', function (e) {
-            var client = e.client,
-                rng = me.selection.getRange(),
-                div = document.createElement('div');
+            ZeroClipboard.config({
+                debug: false,
+                swfPath: me.options.UEDITOR_HOME_URL + 'third-party/zeroclipboard/ZeroClipboard.swf'
+            });
 
-            div.appendChild(rng.cloneContents());
-            client.setText(div.innerText || div.textContent);
-            client.setHtml(div.innerHTML);
-            rng.select();
-        });
-        // hover事件传递到target
-        client.on('mouseover mouseout', function (e) {
-            var target = e.target;
-            if (target) {
-                if (e.type == 'mouseover') {
-                    domUtils.addClass(target, 'edui-state-hover');
-                } else if (e.type == 'mouseout') {
-                    domUtils.removeClasses(target, 'edui-state-hover');
-                }
-            }
-        });
-        // flash加载不成功
-        client.on('wrongflash noflash', function () {
-            ZeroClipboard.destroy();
-        });
+            var client = me.zeroclipboard = new ZeroClipboard();
 
-        // 触发事件
-        me.fireEvent('zeroclipboardready', client);
+            // 复制内容
+            client.on('copy', function (e) {
+                var client = e.client;
+                var rng = me.selection.getRange();
+                var div = document.createElement('div');
 
-    }
-
-    return {
-        bindEvents: {
-            'ready': function () {
-                if (!browser.ie) {
-                    if (window.ZeroClipboard) {
-                        initZeroClipboard();
-                    } else {
-                        utils.loadFile(document, {
-                            src: me.options.UEDITOR_HOME_URL + "third-party/zeroclipboard/ZeroClipboard.js",
-                            tag: "script",
-                            type: "text/javascript",
-                            defer: "defer"
-                        }, function () {
-                            initZeroClipboard();
-                        });
+                div.appendChild(rng.cloneContents());
+                client.setText(div.innerText || div.textContent);
+                client.setHtml(div.innerHTML);
+                rng.select();
+            });
+            // hover事件传递到target
+            client.on('mouseover mouseout', function (e) {
+                var target = e.target;
+                if (target) {
+                    if (e.type === 'mouseover') {
+                        domUtils.addClass(target, 'edui-state-hover');
+                    }
+                    else if (e.type === 'mouseout') {
+                        domUtils.removeClasses(target, 'edui-state-hover');
                     }
                 }
-            }
-        },
-        commands: {
-            'copy': {
-                execCommand: function (cmd) {
-                    if (!me.document.execCommand('copy')) {
-                        alert(me.getLang('copymsg'));
-                    }
-                }
-            }
+
+            });
+            // flash加载不成功
+            client.on('wrongflash noflash', function () {
+                ZeroClipboard.destroy();
+            });
+
+            // 触发事件
+            me.fireEvent('zeroclipboardready', client);
         }
-    }
+
+        return {
+            bindEvents: {
+                ready: function () {
+                    if (!browser.ie) {
+                        if (window.ZeroClipboard) {
+                            initZeroClipboard();
+                        }
+                        else {
+                            utils.loadFile(document, {
+                                src: me.options.UEDITOR_HOME_URL + 'third-party/zeroclipboard/ZeroClipboard.js',
+                                tag: 'script',
+                                type: 'text/javascript',
+                                defer: 'defer'
+                            }, function () {
+                                initZeroClipboard();
+                            });
+                        }
+                    }
+
+                }
+            },
+            commands: {
+                copy: {
+                    execCommand: function (cmd) {
+                        if (!me.document.execCommand('copy')) {
+                            alert(me.getLang('copymsg'));
+                        }
+
+                    }
+                }
+            }
+        };
+    });
 });
