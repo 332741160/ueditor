@@ -1,7 +1,7 @@
 /**
  * 快捷键提交
  * @file
- * @since 1.2.6.1
+ * @author
  */
 
 /**
@@ -15,25 +15,34 @@
  * ```
  */
 
-UE.plugin.register('autosubmit',function(){
-    return {
-        shortcutkey:{
-            "autosubmit":"ctrl+13" //手动提交
-        },
-        commands:{
-            'autosubmit':{
-                execCommand:function () {
-                    var me=this,
-                        form = domUtils.findParentByTagName(me.iframe,"form", false);
-                    if (form){
-                        if(me.fireEvent("beforesubmit")===false){
-                            return;
+define(function (require) {
+    var plugin = require('../core/plugin');
+    var domUtils = require('../core/domUtils');
+
+    function fn() {
+        return {
+            shortcutkey: {
+                autosubmit: 'ctrl+13' // 手动提交
+            },
+            commands: {
+                autosubmit: {
+                    execCommand: function () {
+                        var me = this;
+                        var form = domUtils.findParentByTagName(me.iframe, 'form', false);
+                        if (form) {
+                            if (me.fireEvent('beforesubmit') === false) {
+                                return;
+                            }
+
+                            me.sync();
+                            form.submit();
                         }
-                        me.sync();
-                        form.submit();
+
                     }
                 }
             }
-        }
+        };
     }
+
+    plugin.register('autosubmit', fn);
 });

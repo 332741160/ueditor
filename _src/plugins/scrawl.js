@@ -1,10 +1,15 @@
-///import core
-///commands 涂鸦
-///commandsName  Scrawl
-///commandsTitle  涂鸦
-///commandsDialog  dialogs\scrawl
-UE.commands['scrawl'] = {
-    queryCommandState : function(){
-        return ( browser.ie && browser.version  <= 8 ) ? -1 :0;
-    }
-};
+/**
+ * @author
+ * @file
+ */
+
+define(function (require) {
+    var browser = require('../core/browser');
+
+    // UE.commands['scrawl'] =
+    return {
+        queryCommandState: function () {
+            return (browser.ie && browser.version <= 8) ? -1 : 0;
+        }
+    };
+});

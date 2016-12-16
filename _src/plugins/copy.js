@@ -11,7 +11,7 @@ define(function (require) {
     var utils = require('../core/utils');
     var browser = require('../core/browser');
 
-    plugin.register('copy', function () {
+    function fn() {
         var me = this;
 
         function initZeroClipboard() {
@@ -88,5 +88,7 @@ define(function (require) {
                 }
             }
         };
-    });
+    }
+
+    plugin.register('copy', fn);
 });

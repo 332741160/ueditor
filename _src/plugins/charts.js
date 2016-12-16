@@ -8,7 +8,7 @@ define(function (require) {
     var utils = require('../core/utils');
     var domUtils = require('../core/domUtils');
 
-    plugin.register('charts', function () {
+    function fn() {
         var me = this;
 
         return {
@@ -138,6 +138,7 @@ define(function (require) {
 
             return true;
         }
+    }
 
-    });
+    plugin.register('charts', fn);
 });

@@ -13,6 +13,7 @@ define(function (require) {
     var plugin = require('./plugin');
     var EventBase = require('./EventBase');
     var Selection = require('./Selection');
+    var UE = require('../editor');
 
     var ie = browser.ie;
 
@@ -59,10 +60,11 @@ define(function (require) {
             ? (editor.options.allHtmlEnabled ? editor.getAllHtml() : editor.getContent(null, null, true))
             : '';
     }
-    function loadPlugins(me) {
+
+    function loadPlugins(me) {        // eslint-disable-line
         // 初始化插件
-        for (var pi in plugins) {   // eslint-disable-line
-            plugins[pi].call(me);
+        for (var pi in UE.plugins) {  // eslint-disable-line
+            UE.plugins[pi].call(me);
         }
     }
     function checkCurLang(I18N) {
@@ -259,9 +261,9 @@ define(function (require) {
         /** 尝试异步加载后台配置 */
         me.loadServerConfig();
 
-        if (!utils.isEmptyObject(I18N)) {
+        if (!utils.isEmptyObject(UE.I18N)) {
             // 修改默认的语言类型
-            me.options.lang = checkCurLang(I18N);
+            me.options.lang = checkCurLang(UE.I18N);
             plugin.load(me);
             langReadied(me);
         }
@@ -277,7 +279,7 @@ define(function (require) {
             });
         }
 
-        instants['ueditorInstant' + me.uid] = me;
+        UE.instants['ueditorInstant' + me.uid] = me;
     }
 
     Editor.prototype = {
@@ -390,7 +392,9 @@ define(function (require) {
                 }
 
             }
-            delEditor(key);
+            if (typeof UE.delEditor === 'function') {
+                UE.delEditor(key);
+            }
         },
 
         /**
@@ -1201,7 +1205,7 @@ define(function (require) {
             var cmdName = args[0].toLowerCase();
             var cmd;
             var cmdFn;
-            cmd = this.commands[cmdName] || commands[cmdName];
+            cmd = this.commands[cmdName] || UE.commands[cmdName];
             cmdFn = cmd && cmd[fnName];
             // 没有querycommandstate或者没有command的都默认返回0
             if ((!cmd || !cmdFn) && fnName === 'queryCommandState') {
@@ -1229,7 +1233,7 @@ define(function (require) {
             cmdName = cmdName.toLowerCase();
             var me = this;
             var result;
-            var cmd = me.commands[cmdName] || commands[cmdName];
+            var cmd = me.commands[cmdName] || UE.commands[cmdName];
             if (!cmd || !cmd.execCommand) {
                 return null;
             }
@@ -1554,7 +1558,7 @@ define(function (require) {
          * ```
          */
         getLang: function (path) {
-            var lang = I18N[this.options.lang];
+            var lang = UE.I18N[this.options.lang];
             if (!lang) {
                 throw Error('not import language file');
             }

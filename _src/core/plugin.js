@@ -66,8 +66,8 @@ define(function (require) {
             else if (plugin.afterDisabled) {
                 plugin.afterDisabled.call(editor);
             }
-
         });
+
         // 向下兼容
         utils.each(plugins, function (plugin) {
             plugin.call(editor);

@@ -1,6 +1,7 @@
 /**
  * 打印
  * @file
+ * @author
  * @since 1.2.6.1
  */
 
@@ -14,10 +15,12 @@
  * editor.execCommand( 'print' );
  * ```
  */
-UE.commands['print'] = {
-    execCommand : function(){
-        this.window.print();
-    },
-    notNeedUndo : 1
-};
 
+define(function (require) {
+    return {
+        execCommand: function () {
+            this.window.print();
+        },
+        notNeedUndo: 1
+    };
+});

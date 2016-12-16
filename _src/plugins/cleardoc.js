@@ -1,7 +1,7 @@
 /**
  * 清空文档插件
  * @file
- * @since 1.2.6.1
+ * @author
  */
 
 /**
@@ -16,22 +16,29 @@
  * ```
  */
 
-UE.commands['cleardoc'] = {
-    execCommand : function( cmdName) {
-        var me = this,
-            enterTag = me.options.enterTag,
-            range = me.selection.getRange();
-        if(enterTag == "br"){
-            me.body.innerHTML = "<br/>";
-            range.setStart(me.body,0).setCursor();
-        }else{
-            me.body.innerHTML = "<p>"+(ie ? "" : "<br/>")+"</p>";
-            range.setStart(me.body.firstChild,0).setCursor(false,true);
+define(function (require) {
+    var browser = require('../core/browser');
+    var ie = browser.ie;
+
+    // UE.commands['cleardoc'] =
+    return {
+        execCommand: function (cmdName) {
+            var me = this;
+            var enterTag = me.options.enterTag;
+            var range = me.selection.getRange();
+            if (enterTag === 'br') {
+                me.body.innerHTML = '<br/>';
+                range.setStart(me.body, 0).setCursor();
+            }
+            else {
+                me.body.innerHTML = '<p>' + (ie ? '' : '<br/>') + '</p>';
+                range.setStart(me.body.firstChild, 0).setCursor(false, true);
+            }
+            setTimeout(function () {
+                me.fireEvent('clearDoc');
+            }, 0);
+
         }
-        setTimeout(function(){
-            me.fireEvent("clearDoc");
-        },0);
+    };
 
-    }
-};
-
+});
